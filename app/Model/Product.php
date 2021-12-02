@@ -50,7 +50,6 @@ class Product extends Model
         return $this->hasMany(ProductStock::class);
     }
 
-    //
     public function reviews()
     {
         return $this->hasMany(Review::class);
@@ -85,7 +84,7 @@ class Product extends Model
 
     public function order_details()
     {
-        return $this->hasMany(OrderDetail::class, 'product_id');
+        return $this->hasMany(OrderDetail::class, 'product_id', 'country');
     }
 
     public function wish_list()
@@ -98,6 +97,7 @@ class Product extends Model
         if (strpos(url()->current(), '/admin') || strpos(url()->current(), '/seller')) {
             return $name;
         }
+
         return $this->translations[0]->value ?? $name;
     }
 
@@ -106,6 +106,7 @@ class Product extends Model
         if (strpos(url()->current(), '/admin') || strpos(url()->current(), '/seller')) {
             return $detail;
         }
+
         return $this->translations[0]->value ?? $detail;
     }
 
@@ -114,12 +115,12 @@ class Product extends Model
         parent::boot();
         static::addGlobalScope('translate', function (Builder $builder) {
             $builder->with(['translations' => function ($query) {
-                if (strpos(url()->current(), '/api')){
+                if (strpos(url()->current(), '/api')) {
                     return $query->where('locale', App::getLocale());
-                }else{
+                } else {
                     return $query->where('locale', Helpers::default_lang());
                 }
-            },'reviews'])->withCount('reviews');
+            }, 'reviews'])->withCount('reviews');
         });
     }
 }

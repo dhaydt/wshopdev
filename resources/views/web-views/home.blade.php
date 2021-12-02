@@ -754,6 +754,16 @@
                                                 @endif
                                             </span>
                                         </div>
+                                        <div class="d-flex justify-content-start w-100"
+                                            style="position: absolute;bottom: -15px;left: 5px;z-index: 1;">
+                                            <div class="flag">
+                                                <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}"
+                                                    width="20"
+                                                    src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product->country)  }}.png"
+                                                    alt="Eng">
+                                            </div>
+                                            <span>{{ $product->country }}</span>
+                                        </div>
                                     </div>
                                 </div>
                         </div>
@@ -814,6 +824,16 @@
                                             </strike>
                                             @endif
                                         </span>
+                                    </div>
+                                    <div class="d-flex justify-content-start w-100"
+                                        style="position: absolute;bottom: -15px;left: 5px;z-index: 1;">
+                                        <div class="flag">
+                                            <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}"
+                                                width="20"
+                                                src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product->country)  }}.png"
+                                                alt="Eng">
+                                        </div>
+                                        <span>{{ $product->country }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -879,6 +899,16 @@
                                             </strike>
                                             @endif
                                         </span>
+                                    </div>
+                                    <div class="d-flex justify-content-start w-100"
+                                        style="position: absolute;bottom: -15px;left: 5px;z-index: 1;">
+                                        <div class="flag">
+                                            <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}"
+                                                width="20"
+                                                src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product->country)  }}.png"
+                                                alt="Eng">
+                                        </div>
+                                        <span>{{ $product->country }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1190,11 +1220,14 @@
         <div class="row mt-2 mb-3">
             @foreach(\App\CPU\CategoryManager::products($category['id']) as $key=>$product)
             @if($key<12) <div class="col-xl-2 col-sm-3 col-6" style="margin-bottom: 10px">
-                @if (empty($country)) @include('web-views.partials._single-product',['product'=>$product])
+                @if (empty($country))
+                @include('web-views.partials._single-product',['product'=>$product])
                 @else
                 @if($product['country'] == $country)
                 {{-- {{ dd($product['country']) }} --}}
                 @include('web-views.partials._single-product',['product'=>$product])
+                @else
+                <div id="empty" class="empty"></div>
                 @endif
                 @endif
         </div>
@@ -1253,6 +1286,7 @@
                                 </span>
                             </div>
                         </div>
+
                 </div>
                 @endif
                 @endforeach
@@ -1454,6 +1488,16 @@
                 }
             }
         })
+
+        $( window ).on( "load",function() {
+            var work = $(".empty").parent('div').remove();
+            console.log( work );
+        });
+
+        $( window ).on( "load", function() {
+        console.log( "window loaded" );
+        });
+
     </script>
 
     <script>

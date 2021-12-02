@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_lang']], function () {
-
     Route::group(['prefix' => 'auth', 'namespace' => 'auth'], function () {
         Route::post('register', 'PassportAuthController@register');
         Route::post('login', 'PassportAuthController@login');
@@ -36,19 +35,21 @@ Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_l
         Route::get('/', 'ConfigController@configuration');
     });
 
-    Route::group(['prefix' => 'shipping-method','middleware'=>'auth:api'], function () {
+    Route::group(['prefix' => 'shipping-method', 'middleware' => 'auth:api'], function () {
         Route::get('detail/{id}', 'ShippingMethodController@get_shipping_method_info');
         Route::get('by-seller/{id}/{seller_is}', 'ShippingMethodController@shipping_methods_by_seller');
         Route::post('choose-for-order', 'ShippingMethodController@choose_for_order');
         Route::get('chosen', 'ShippingMethodController@chosen_shipping_methods');
     });
 
-    Route::group(['prefix' => 'cart','middleware'=>'auth:api'], function () {
+    Route::group(['prefix' => 'cart', 'middleware' => 'auth:api'], function () {
         Route::get('/', 'CartController@cart');
         Route::post('add', 'CartController@add_to_cart');
         Route::put('update', 'CartController@update_cart');
         Route::delete('remove', 'CartController@remove_from_cart');
     });
+
+    Route::get('country', 'AttributeController@country');
 
     Route::get('faq', 'GeneralController@faq');
 
@@ -67,6 +68,12 @@ Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_l
         Route::post('reviews/submit', 'ProductController@submit_product_review')->middleware('auth:api');
         Route::get('best-sellings', 'ProductController@get_best_sellings');
         Route::get('home-categories', 'ProductController@get_home_categories');
+
+        Route::get('short_latest/{country}', 'ProductController@short_latest_products');
+        Route::get('short_featured/{country}', 'ProductController@short_featured_products');
+        Route::get('short_top-rated/{country}', 'ProductController@short_top_rated_products');
+        Route::get('short_best-sellings/{country}', 'ProductController@short_best_sellings');
+        Route::get('short_home-categories/{country}', 'ProductController@short_home_categories');
     });
 
     Route::group(['prefix' => 'notifications'], function () {
@@ -148,7 +155,7 @@ Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_l
         Route::get('all', 'SellerController@get_all_sellers');
     });
 
-    Route::group(['prefix' => 'coupon','middleware' => 'auth:api'], function () {
+    Route::group(['prefix' => 'coupon', 'middleware' => 'auth:api'], function () {
         Route::get('apply', 'CouponController@apply');
     });
 });

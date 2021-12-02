@@ -22,9 +22,23 @@ class ProductManager
         /*$paginator->count();*/
         return [
             'total_size' => $paginator->total(),
-            'limit' => (integer)$limit,
-            'offset' => (integer)$offset,
-            'products' => $paginator->items()
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $paginator->items(),
+        ];
+    }
+
+    public static function get_seller_products($seller_id, $limit = 10, $offset = 1)
+    {
+        $paginator = Product::active()->with(['rating'])
+            ->where(['user_id' => $seller_id, 'added_by' => 'seller'])
+            ->paginate($limit, ['*'], 'page', $offset);
+        /*$paginator->count();*/
+        return [
+            'total_size' => $paginator->total(),
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $paginator->items(),
         ];
     }
 
@@ -37,9 +51,9 @@ class ProductManager
 
         return [
             'total_size' => $paginator->total(),
-            'limit' => (integer)$limit,
-            'offset' => (integer)$offset,
-            'products' => $paginator->items()
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $paginator->items(),
         ];
     }
 
@@ -51,7 +65,7 @@ class ProductManager
             })
             ->select('product_id', DB::raw('AVG(rating) as count'))
             ->groupBy('product_id')
-            ->orderBy("count", 'desc')
+            ->orderBy('count', 'desc')
             ->paginate($limit, ['*'], 'page', $offset);
 
         $data = [];
@@ -61,9 +75,9 @@ class ProductManager
 
         return [
             'total_size' => $reviews->total(),
-            'limit' => (integer)$limit,
-            'offset' => (integer)$offset,
-            'products' => $data
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $data,
         ];
     }
 
@@ -75,7 +89,7 @@ class ProductManager
             })
             ->select('product_id', DB::raw('COUNT(product_id) as count'))
             ->groupBy('product_id')
-            ->orderBy("count", 'desc')
+            ->orderBy('count', 'desc')
             ->paginate($limit, ['*'], 'page', $offset);
 
         $data = [];
@@ -85,15 +99,16 @@ class ProductManager
 
         return [
             'total_size' => $paginator->total(),
-            'limit' => (integer)$limit,
-            'offset' => (integer)$offset,
-            'products' => $data
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $data,
         ];
     }
 
     public static function get_related_products($product_id)
     {
         $product = Product::find($product_id);
+
         return Product::active()->with(['rating'])->where('category_ids', $product->category_ids)
             ->where('id', '!=', $product->id)
             ->limit(10)
@@ -111,9 +126,9 @@ class ProductManager
 
         return [
             'total_size' => $paginator->total(),
-            'limit' => (integer)$limit,
-            'offset' => (integer)$offset,
-            'products' => $paginator->items()
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $paginator->items(),
         ];
     }
 
@@ -128,9 +143,9 @@ class ProductManager
 
         return [
             'total_size' => $paginator->total(),
-            'limit' => (integer)$limit,
-            'offset' => (integer)$offset,
-            'products' => $paginator->items()
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $paginator->items(),
         ];
     }
 
@@ -142,6 +157,7 @@ class ProductManager
         } elseif ($image_type == 'product') {
             $path = asset('storage/app/public/product');
         }
+
         return $path;
     }
 
@@ -149,6 +165,7 @@ class ProductManager
     {
         $reviews = Review::where('product_id', $id)
             ->where('status', 1)->get();
+
         return $reviews;
     }
 
@@ -161,21 +178,22 @@ class ProductManager
         $rating1 = 0;
         foreach ($reviews as $key => $review) {
             if ($review->rating == 5) {
-                $rating5 += 1;
+                ++$rating5;
             }
             if ($review->rating == 4) {
-                $rating4 += 1;
+                ++$rating4;
             }
             if ($review->rating == 3) {
-                $rating3 += 1;
+                ++$rating3;
             }
             if ($review->rating == 2) {
-                $rating2 += 1;
+                ++$rating2;
             }
             if ($review->rating == 1) {
-                $rating1 += 1;
+                ++$rating1;
             }
         }
+
         return [$rating5, $rating4, $rating3, $rating2, $rating1];
     }
 
@@ -209,17 +227,84 @@ class ProductManager
         return $methods;
     }
 
-    public static function get_seller_products($seller_id, $limit = 10, $offset = 1)
+    public static function short_latest_products($limit = 10, $offset = 1, $country)
     {
         $paginator = Product::active()->with(['rating'])
-            ->where(['user_id' => $seller_id, 'added_by' => 'seller'])
-            ->paginate($limit, ['*'], 'page', $offset);
+        ->where('country', $country)
+        ->latest()->paginate($limit, ['*'], 'page', $offset);
+        // dd($paginator);
         /*$paginator->count();*/
         return [
             'total_size' => $paginator->total(),
-            'limit' => (integer)$limit,
-            'offset' => (integer)$offset,
-            'products' => $paginator->items()
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $paginator->items(),
+        ];
+    }
+
+    public static function short_featured_products($limit = 10, $offset = 1, $country)
+    {
+        $paginator = Product::with(['reviews'])->active()
+            ->where('featured', 1)
+            ->where('country', $country)
+            ->withCount(['order_details'])->orderBy('order_details_count', 'DESC')
+            ->paginate($limit, ['*'], 'page', $offset);
+
+        return [
+            'total_size' => $paginator->total(),
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $paginator->items(),
+        ];
+    }
+
+    public static function short_top_rated_products($limit = 10, $offset = 1, $country)
+    {
+        $reviews = Review::with('product')
+            ->whereHas('product', fn ($query) => $query->where('country', $country))
+            ->whereHas('product', function ($query) {
+                $query->active();
+            })
+            ->select('product_id', DB::raw('AVG(rating) as count'))
+            ->groupBy('product_id')
+            ->orderBy('count', 'desc')
+            ->paginate($limit, ['*'], 'page', $offset);
+
+        $data = [];
+        foreach ($reviews as $review) {
+            array_push($data, $review->product);
+        }
+
+        return [
+            'total_size' => $reviews->total(),
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $data,
+        ];
+    }
+
+    public static function short_best_selling_products($limit = 10, $offset = 1, $country)
+    {
+        $paginator = OrderDetail::with('product.reviews')
+        ->whereHas('product', fn ($query) => $query->where('country', $country))
+            ->whereHas('product', function ($query) {
+                $query->active();
+            })
+            ->select('product_id', DB::raw('COUNT(product_id) as count'))
+            ->groupBy('product_id')
+            ->orderBy('count', 'desc')
+            ->paginate($limit, ['*'], 'page', $offset);
+
+        $data = [];
+        foreach ($paginator as $order) {
+            array_push($data, $order->product);
+        }
+
+        return [
+            'total_size' => $paginator->total(),
+            'limit' => (int) $limit,
+            'offset' => (int) $offset,
+            'products' => $data,
         ];
     }
 }

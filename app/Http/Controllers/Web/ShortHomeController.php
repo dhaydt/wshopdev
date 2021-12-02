@@ -58,28 +58,37 @@ class ShortHomeController extends Controller
         $categories = Category::where('position', 0)->take(12)->get();
         $brands = Brand::take(15)->get();
         //best sell product
+        // $prod = OrderDetail::with('product')->get()->pluck(('product.country'))->flatten();
+
         $bestSellProduct = OrderDetail::with('product.reviews')
-            ->whereHas('product', function ($query) {
-                $query->active();
-            })
-            ->select('product_id', DB::raw('COUNT(product_id) as count'))
-            ->groupBy('product_id')
-            ->orderBy('count', 'desc')
-            ->take(4)
-            ->get();
+        ->whereHas('product', function ($query) {
+            $query->active();
+        })->whereHas('product', fn ($query) => $query->where('country', $country))
+        ->select('product_id', DB::raw('COUNT(product_id) as count'))
+        ->groupBy('product_id')
+        ->orderBy('count', 'desc')
+        ->take(4)
+        ->get();
+
+        // OrderDetail::with('product.reviews')
+        // ->whereHas('product',
+        // function ($query) {$query->active(); })->select('product_id', DB::raw('COUNT(product_id) as count'))
+        // ->whereHas('product', fn ($query) => $query->where('country', $country))
+        // ->get();
 
         //Top rated
         $topRated = Review::with('product')
             ->whereHas('product', function ($query) {
                 $query->active();
-            })
+            })->whereHas('product', fn ($query) => $query->where('country', $country))
             ->select('product_id', DB::raw('AVG(rating) as count'))
             ->groupBy('product_id')
             ->orderBy('count', 'desc')
             ->take(4)
             ->get();
 
-        // dd($topRated);
+        // dd($prod);
+        // dd($bestSellProduct);
         if ($bestSellProduct->count() == 0) {
             $bestSellProduct = $latest_products;
         }

@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-use App\Model\Order;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderDetail extends Model
@@ -23,6 +22,11 @@ class OrderDetail extends Model
     public function product()
     {
         return $this->belongsTo(Product::class)->where('status', 1);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Product::class);
     }
 
     public function active_product()
