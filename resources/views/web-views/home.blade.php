@@ -1189,6 +1189,15 @@
                             <p class="text-center small font-weight-bold">{{Str::limit($seller->name, 14)}}</p>
                         </a>
                     </center>
+                    <div class="d-flex justify-content-start w-100"
+                        style="position: absolute;bottom: 10px;left: 10px;z-index: 1;">
+                        <div class="flag">
+                            <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}" width="20"
+                                src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($seller->country)  }}.png"
+                                alt="Eng" style="width: 20px">
+                        </div>
+                        <span style="font-size: 13px; line-height: 1;">{{ $seller->country }}</span>
+                    </div>
                 </div>
                 @endif
                 @endforeach

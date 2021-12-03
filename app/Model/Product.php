@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Country;
 use App\CPU\Helpers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -43,6 +44,11 @@ class Product extends Model
         })->where(['status' => 1])->orWhere(function ($query) {
             $query->where(['added_by' => 'admin', 'status' => 1]);
         });
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country', 'country');
     }
 
     public function stocks()

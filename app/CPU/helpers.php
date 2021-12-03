@@ -2,6 +2,7 @@
 
 namespace App\CPU;
 
+use App\Country;
 use App\Model\Admin;
 use App\Model\BusinessSetting;
 use App\Model\Category;
@@ -33,7 +34,11 @@ class Helpers
 
     public static function country()
     {
-        $country = Product::all()->unique('country')->pluck('country');
+        // $country = Product::with('country')->whereIn('country', 'country');
+        $country = Country::with('product')->has('product')->get();
+
+        // all()->unique('country');
+        // ->pluck('country');
         // dd($country);
 
         return $country;

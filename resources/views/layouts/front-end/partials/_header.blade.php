@@ -700,13 +700,14 @@
                         <li class="nav-item dropdown ml-auto">
                             <a class="nav-link dropdown-toggle text-dark border-right py-2 mt-2" href="#"
                                 data-toggle="dropdown" style="color: black !important">
-                                <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}" width="20"
+                                <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}"
+                                    style="height: 16px; width: auto"
                                     src="{{asset('public/assets/front-end')}}/img/loc.png" alt="Eng">
                                 <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}" width="20"
                                     src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($country ?? 'id')  }}.png"
                                     alt="Eng">
                                 @if (empty($country))
-                                ID
+                                Indonesia
                                 @else
 
                                 {{ $country }}
@@ -715,12 +716,12 @@
                             <ul class="dropdown-menu scroll-bar">
                                 @foreach($short as $data)
                                 <li>
-                                    <a class="dropdown-item pb-1" href="{{route('shortBy', $data)}}">
+                                    <a class="dropdown-item pb-1" href="{{route('shortBy', $data->country)}}">
                                         <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}"
                                             width="20"
-                                            src="{{asset('public/assets/front-end')}}/img/flags/{{strtolower($data)}}.png"
-                                            alt="{{$data}}" />
-                                        <span style="text-transform: capitalize">{{ $data }}</span>
+                                            src="{{asset('public/assets/front-end')}}/img/flags/{{strtolower($data->country)}}.png"
+                                            alt="flsg" />
+                                        <span style="text-transform: capitalize">{{ $data->country_name }}</span>
                                     </a>
                                 </li>
                                 @endforeach
