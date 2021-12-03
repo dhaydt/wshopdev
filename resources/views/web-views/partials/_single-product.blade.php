@@ -32,7 +32,8 @@
             </div>
         </div>
 
-        <div class="card-body inline_product text-center p-1 clickable" style="cursor: pointer; max-height:7.5rem;">
+        <div class="card-body inline_product text-center p-1 clickable"
+            style="cursor: pointer; max-height:7.5rem;margin-bottom: 23px;">
             <div class="rating-show">
                 <span class="d-inline-block font-size-sm text-body">
                     @for($inc=0;$inc<5;$inc++) @if($inc<$overallRating[0]) <i class="sr-star czi-star-filled active">
@@ -71,7 +72,8 @@
                     src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product['country'])  }}.png"
                     alt="Eng">
             </div>
-            <span>{{ $product['country'] }}</span>
+            @php($c_name = App\Country::where('country', $product['country'])->get())
+            <span style="font-size: 13px; color: #616166; line-height: 1.6;">{{ $c_name[0]->country_name }}</span>
         </div>
 
         <div class="card-body card-body-hidden" style="padding-bottom: 5px!important;">

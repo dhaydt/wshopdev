@@ -2,7 +2,7 @@
 
 @php($overallRating = \App\CPU\ProductManager::get_overall_rating($product->reviews))
 
-<div class="product-card card {{$product['current_stock']==0?'stock-card':''}}"
+<div class="product-card card pb-3 {{$product['current_stock']==0?'stock-card':''}}"
     style="margin-bottom: 40px; box-shadow: none;">
     @if($product['current_stock']<=0) <label style="left: 29%!important; top: 29%!important;"
         class="badge badge-danger stock-out">Stock Out</label>
@@ -68,13 +68,14 @@
             </div>
 
         </div>
-        <div class="d-flex justify-content-start w-100" style="position: absolute;bottom: -15px;left: 5px;z-index: 1;">
+        <div class="d-flex justify-content-start w-100" style="position: absolute;bottom: 0px;left: 5px;z-index: 1;">
             <div class="flag">
                 <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}" width="20"
                     src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product->country)  }}.png"
                     alt="Eng">
             </div>
-            <span>{{ $product->country }}</span>
+            @php($c_name = App\Country::where('country', $product->country)->get())
+            <span style="font-size: 13px; color: #616166; line-height: 1.6;">{{ $c_name[0]->country_name }}</span>
         </div>
 
         <div class="card-body card-body-hidden" style="padding-bottom: 5px!important;">

@@ -725,7 +725,7 @@
                             @foreach($bestSellProduct as $key=>$bestSell)
                             @if($bestSell->product && $key<4) <div class="col col-md-4 col-sm-2">
                                 <div class="media d-flex flex-column pt-2 pb-2 mb-1"
-                                    data-href="{{route('product',$bestSell->product->slug)}}" style="height:195px">
+                                    data-href="{{route('product',$bestSell->product->slug)}}" style="height: 215px">
                                     <div class="card-header" style="min-height: 127px; max-height: 135px; width: 100%;">
                                         <a class="d-block text-center {{Session::get('direction') === " rtl" ? 'ml-2'
                                             : 'mr-2' }}" href="{{route('product',$bestSell->product->slug)}}">
@@ -742,7 +742,7 @@
                                                 {{strlen($bestSell->product['name'])>30?'...':''}}</a>
                                         </h6>
                                         <div class="widget-product-meta">
-                                            <span class="text-accent">
+                                            <span class="text-accent d-flex flex-column">
                                                 {{\App\CPU\Helpers::currency_converter(
                                                 $bestSell->product->unit_price-(\App\CPU\Helpers::get_product_discount($bestSell->product,$bestSell->product->unit_price))
                                                 )}}
@@ -762,7 +762,9 @@
                                                     src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product->country)  }}.png"
                                                     alt="Eng">
                                             </div>
-                                            <span>{{ $product->country }}</span>
+                                            @php($c_name = App\Country::where('country', $product->country)->get())
+                                            <span style="font-size: 13px; color: #616166; line-height: 2;">{{
+                                                $c_name[0]->country_name }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -795,7 +797,7 @@
                     <div class="row">
                         @foreach($latest_products as $key=>$product)
                         @if($key<4) <div class="col col-md-4 col-sm-2 mb-2">
-                            <div class="media d-flex flex-column pt-2 pb-2 mb-1" style="height:195px"
+                            <div class="media d-flex flex-column pt-2 pb-2 mb-1" style="height: 215px"
                                 data-href="{{route('product',$product->slug)}}">
                                 <div class="card-header" style="min-height: 127px; max-height: 135px; width: 100%;">
                                     <a class="d-block text-center {{Session::get('direction') === " rtl" ? 'ml-2'
@@ -814,7 +816,7 @@
                                         </a>
                                     </h6>
                                     <div class="widget-product-meta">
-                                        <span class="text-accent">
+                                        <span class="text-accent d-flex flex-column">
                                             {{\App\CPU\Helpers::currency_converter(
                                             $product->unit_price-(\App\CPU\Helpers::get_product_discount($product,$product->unit_price))
                                             )}}
@@ -833,7 +835,9 @@
                                                 src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product->country)  }}.png"
                                                 alt="Eng">
                                         </div>
-                                        <span>{{ $product->country }}</span>
+                                        @php($c_name = App\Country::where('country', $product->country)->get())
+                                        <span style="font-size: 13px; color: #616166; line-height: 2;">{{
+                                            $c_name[0]->country_name }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -867,7 +871,7 @@
                     <div class="row">
                         @foreach($topRated as $key=>$top)
                         @if($top->product && $key<4) <div class="col col-md-4 col-sm-2 mb-2">
-                            <div class="media d-flex flex-column pt-2 pb-2 mb-1" style="height:195px"
+                            <div class="media d-flex flex-column pt-2 pb-2 mb-1" style="height:215px"
                                 data-href="{{route('product',$product->slug)}}">
                                 <div class="card-header" style="min-height: 127px; max-height: 135px; width: 100%;">
                                     <a class="d-block text-center {{Session::get('direction') === " rtl" ? 'ml-2'
@@ -888,7 +892,7 @@
                                         </a>
                                     </h6>
                                     <div class="widget-product-meta">
-                                        <span class="text-accent">
+                                        <span class="text-accent d-flex flex-column">
                                             {{\App\CPU\Helpers::currency_converter(
                                             $top->product->unit_price-(\App\CPU\Helpers::get_product_discount($top->product,$top->product->unit_price))
                                             )}}
@@ -908,7 +912,9 @@
                                                 src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product->country)  }}.png"
                                                 alt="Eng">
                                         </div>
-                                        <span>{{ $product->country }}</span>
+                                        @php($c_name = App\Country::where('country', $product->country)->get())
+                                        <span style="font-size: 13px; color: #616166; line-height: 2;">{{
+                                            $c_name[0]->country_name }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1191,12 +1197,14 @@
                     </center>
                     <div class="d-flex justify-content-start w-100"
                         style="position: absolute;bottom: 10px;left: 10px;z-index: 1;">
-                        <div class="flag">
+                        <div class="flag d-flex align-items-center">
                             <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}" width="20"
                                 src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($seller->country)  }}.png"
                                 alt="Eng" style="width: 20px">
                         </div>
-                        <span style="font-size: 13px; line-height: 1;">{{ $seller->country }}</span>
+                        @php($c_name = App\Country::where('country', $product->country)->get())
+                        <span style="font-size: 13px; color: #616166; line-height: 2;">{{ $c_name[0]->country_name
+                            }}</span>
                     </div>
                 </div>
                 @endif

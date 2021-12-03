@@ -303,8 +303,9 @@
                                 src="{{asset('public/assets/front-end')}}/img/flags/{{strtolower($seller->shop->country)}}.png"
                                 alt="flag" />
                         </div>
+                        @php($c_name = App\Country::where('country', $seller->shop->country)->get())
                         <div class="">
-                            <h5>{{$seller->shop->country}}</h5>
+                            <h5>{{$c_name[0]->country_name}}</h5>
                         </div>
                     </div>
                 </div>

@@ -548,10 +548,11 @@
                                         src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($product->seller->shop->country)  }}.png"
                                         alt="Eng" style="width: 20px">
                                 </div>
+                                @php($c_name = App\Country::where('country', $product->seller->shop->country)->get())
                                 <span
                                     class="d-inline-block font-size-sm text-body align-middle mt-1 {{Session::get('direction') === "
-                                    rtl" ? 'ml-2' : 'mr-2' }}"
-                                    style="line-height: 1.2;">{{$product->seller->shop->country}} </span>
+                                    rtl" ? 'ml-2' : 'mr-2' }}" style="line-height: 1.2;">{{$c_name[0]->country_name}}
+                                </span>
                                 <span
                                     class="d-inline-block font-size-sm text-body align-middle mt-1 {{Session::get('direction') === "
                                     rtl" ? 'mr-2' : 'ml-2' }}"></span>
@@ -648,7 +649,7 @@
                                 </div>
                                 <span
                                     class="d-inline-block font-size-sm text-body align-middle mt-1 {{Session::get('direction') === "
-                                    rtl" ? 'ml-2' : 'mr-2' }}" style="line-height: 1.2;">ID </span>
+                                    rtl" ? 'ml-2' : 'mr-2' }}" style="line-height: 1.2;">Indonesia </span>
                                 <span
                                     class="d-inline-block font-size-sm text-body align-middle mt-1 {{Session::get('direction') === "
                                     rtl" ? 'mr-2' : 'ml-2' }}"></span>
