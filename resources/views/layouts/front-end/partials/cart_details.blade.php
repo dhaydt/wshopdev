@@ -119,7 +119,33 @@
                     <div class="col-12">
                         <select class="form-control" onchange="set_shipping_id(this.value,'all_cart_group')">
                             <option>{{\App\CPU\translate('choose_shipping_method')}}</option>
-                            @foreach($shippings as $shipping)
+                            @foreach($shippings[0][0][0]['costs'] as $ship)
+                            {{-- {{ dd($ship) }} --}}
+                            <option value="{{$ship['service']}}"
+                                {{$choosen_shipping['shipping_method_id']==$ship['service']?'selected':''}}>
+                                {{"JNE - ".''.$ship['service'].' ( '.$ship['cost'][0]['etd'].' Days)
+                                '.\App\CPU\Helpers::currency_converter($ship['cost'][0]['value'])}}
+                            </option>
+                            @endforeach
+
+                            @foreach($shippings[0][1][0]['costs'] as $ship)
+                            {{-- {{ dd($ship) }} --}}
+                            <option value="{{$ship['service']}}"
+                                {{$choosen_shipping['shipping_method_id']==$ship['service']?'selected':''}}>
+                                {{"TIKI - ".''.$ship['service'].' ( '.$ship['cost'][0]['etd'].' Days)
+                                '.\App\CPU\Helpers::currency_converter($ship['cost'][0]['value'])}}
+                            </option>
+                            @endforeach
+
+                            @foreach($shippings[0][2][0]['costs'] as $ship)
+                            {{-- {{ dd($ship) }} --}}
+                            <option value="{{$ship['service']}}"
+                                {{$choosen_shipping['shipping_method_id']==$ship['service']?'selected':''}}>
+                                {{"SiCepat - ".''.$ship['service'].' ( '.$ship['cost'][0]['etd'].' Days)
+                                '.\App\CPU\Helpers::currency_converter($ship['cost'][0]['value'])}}
+                            </option>
+                            @endforeach
+                            @foreach($shippings[1] as $shipping)
                                 <option
                                     value="{{$shipping['id']}}" {{$choosen_shipping['shipping_method_id']==$shipping['id']?'selected':''}}>
                                     {{$shipping['title'].' ( '.$shipping['duration'].' ) '.\App\CPU\Helpers::currency_converter($shipping['cost'])}}

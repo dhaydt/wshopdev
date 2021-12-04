@@ -251,8 +251,6 @@
             : 7%;
         }
     }
-</style>
-<style>
     th,
     td {
         border-bottom: 1px solid #ddd;
@@ -260,13 +258,7 @@
     }
 
     thead {
-        background: {
-                {
-                $web_config['primary_color']
-            }
-        }
-
-         !important;
+        background: $web_config['primary_color'] !important;
         color: white;
     }
 </style>

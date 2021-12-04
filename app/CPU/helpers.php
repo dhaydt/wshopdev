@@ -44,6 +44,40 @@ class Helpers
         return $country;
     }
 
+    public static function province()
+    {
+        session()->put('keep_return_url', url()->previous());
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => config('rajaongkir.url').'/province',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'key:'.config('rajaongkir.api_key'),
+            ],
+        ]);
+
+        $resp = curl_exec($curl);
+        $err = curl_error($curl);
+        $resp = json_decode($resp, true);
+        $prov = $resp['rajaongkir']['results'];
+
+        // dd($prov);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo 'cURL Error #:'.$err;
+        } else {
+            return $prov;
+        }
+    }
+
     public static function transaction_formatter($transaction)
     {
         if ($transaction['paid_by'] == 'customer') {
@@ -192,7 +226,127 @@ class Helpers
 
     public static function get_shipping_methods($seller_id, $type)
     {
-        return ShippingMethod::where(['status' => 1])->where(['creator_id' => $seller_id, 'creator_type' => $type])->get();
+        $id = auth('customer')->id();
+        // dd($id);
+        $user = User::find($id);
+        // dd($user);
+        $to_district = $user->district_id;
+        $to_type = $user->city_type;
+        // $to_district = $user->district
+        // $to_state = $user->state_id;
+        // dd($to_type);
+        $weight = '50';
+
+        $from_city = '151';
+        $from_type = 'Kota';
+        // $from_state = '21';
+        $ShippingMethod = ShippingMethod::where(['status' => 1])->where(['creator_id' => $seller_id, 'creator_type' => $type])->get();
+
+        $curl = curl_init();
+        // JNE
+        curl_setopt_array($curl, [
+            CURLOPT_URL => config('rajaongkir.url').'/cost',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            // CURLOPT_POSTFIELDS => 'origin='.$from_city.'&originType='.$from_type.'&destination='.$to_city.'&destinationType='.$to_type.'&weight='.$weight.'&courier=jne',
+            CURLOPT_POSTFIELDS => 'origin='.$from_city.'&originType=city&destination='.$to_district.'&destinationType=subdistrict&weight='.$weight.'&courier=jne',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/x-www-form-urlencoded',
+                'key:'.config('rajaongkir.api_key'),
+            ],
+        ]);
+
+        $responseJne = curl_exec($curl);
+        $errJne = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($errJne) {
+            echo 'cURL Error #:'.$errJne;
+        } else {
+            $response = json_decode($responseJne, true);
+            $data_ongkir = $response['rajaongkir']['results'];
+            // $data_ongkir = $response;
+
+            // $jne = json_encode($data_ongkir);
+            // dd($data_ongkir);
+
+            // return with([$data_ongkir, $ShippingMethod]);
+        }
+
+        $curl = curl_init();
+        // SICEPAT
+        curl_setopt_array($curl, [
+            CURLOPT_URL => config('rajaongkir.url').'/cost',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            // CURLOPT_POSTFIELDS => 'origin='.$from_city.'&originType='.$from_type.'&destination='.$to_city.'&destinationType='.$to_type.'&weight='.$weight.'&courier=jne',
+            CURLOPT_POSTFIELDS => 'origin='.$from_city.'&originType=city&destination='.$to_district.'&destinationType=subdistrict&weight='.$weight.'&courier=sicepat',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/x-www-form-urlencoded',
+                'key:'.config('rajaongkir.api_key'),
+            ],
+        ]);
+
+        $responseSicepat = curl_exec($curl);
+        $errSicepat = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($errSicepat) {
+            echo 'cURL Error #:'.$errSicepat;
+        } else {
+            $response = json_decode($responseSicepat, true);
+            $sicepat = $response['rajaongkir']['results'];
+            // $data_ongkir = $response;
+
+            // $jne = json_encode($data_ongkir);
+            // dd($sicepat);
+
+            // return with([$data_ongkir, $ShippingMethod]);
+        }
+
+        // TIKI
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => config('rajaongkir.url').'/cost',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => 'origin='.$from_city.'&originType=city&destination='.$to_district.'&destinationType=subdistrict&weight='.$weight.'&courier=tiki',
+            CURLOPT_HTTPHEADER => [
+                'content-type: application/x-www-form-urlencoded',
+                'key:'.config('rajaongkir.api_key'),
+            ],
+        ]);
+
+        $responseTiki = curl_exec($curl);
+        $errTiki = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($errTiki) {
+            echo 'cURL Error #:'.$errTiki;
+        } else {
+            $response = json_decode($responseTiki, true);
+            $tiki = $response['rajaongkir']['results'];
+
+            // $jne = json_encode($data_ongkir);
+            // dd($data_ongkir);
+
+            return with([[$data_ongkir, $tiki, $sicepat], $ShippingMethod]);
+        }
     }
 
     public static function get_image_path($type)

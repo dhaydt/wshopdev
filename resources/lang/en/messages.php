@@ -1383,4 +1383,15 @@
   'Please enter your phone
                                         number' => 'Please enter your phone
                                         number',
+  'add_address' => 'Add address',
+  'fill_address' => 'Fill address',
+  'State_/_Province' => 'State / Province',
+  'District' => 'District',
+  'Continue' => 'Continue',
+  'Please enter valid email
+                                        address' => 'Please enter valid email
+                                        address',
+  'Please enter your first
+                                        name' => 'Please enter your first
+                                        name',
 );

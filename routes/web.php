@@ -66,7 +66,10 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode']], funct
     Route::post('user-account-update', 'UserProfileController@user_update')->name('user-update');
     Route::post('user-account-picture', 'UserProfileController@user_picture')->name('user-picture');
     Route::get('account-address', 'UserProfileController@account_address')->name('account-address');
+    Route::get('city/{id}', 'UserProfileController@getCity')->name('getCiy');
+    Route::get('district/{id}', 'UserProfileController@getDistrict')->name('getDistrict');
     Route::post('account-address-store', 'UserProfileController@address_store')->name('address-store');
+    Route::post('account-address-store-first', 'UserProfileController@address_store_first')->name('address-store-first');
     Route::get('account-address-delete', 'UserProfileController@address_delete')->name('address-delete');
     Route::post('account-address-update', 'UserProfileController@address_update')->name('address-update');
     Route::get('account-payment', 'UserProfileController@account_payment')->name('account-payment');
