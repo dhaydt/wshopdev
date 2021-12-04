@@ -269,7 +269,9 @@ class WebController extends Controller
         if (auth('customer')->check() && Cart::where(['customer_id' => auth('customer')->id()])->count() > 0) {
             if (auth('customer')->user()->district == null) {
                 // dd('no distrcit');
-                return view('web-views.addAddress');
+                $country = DB::table('country')->get();
+
+                return view('web-views.addAddress', compact('country'));
             }
 
             // $customer = auth('customer');
