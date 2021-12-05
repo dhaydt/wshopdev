@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Customer;
 use App\CPU\CartManager;
 use App\CPU\Helpers;
 use App\Http\Controllers\Controller;
+use App\Model\Cart;
 use App\Model\CartShipping;
 use App\Model\ShippingMethod;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -17,12 +19,14 @@ class SystemController extends Controller
     {
         if (auth('customer')->check() || session()->has('mobile_app_payment_customer_id')) {
             session()->put('payment_method', $name);
+
             return response()->json([
-                'status' => 1
+                'status' => 1,
             ]);
         }
+
         return response()->json([
-            'status' => 0
+            'status' => 0,
         ]);
     }
 
@@ -38,7 +42,7 @@ class SystemController extends Controller
         }
 
         return response()->json([
-            'status' => 1
+            'status' => 1,
         ]);
     }
 
@@ -48,9 +52,32 @@ class SystemController extends Controller
         if (isset($shipping) == false) {
             $shipping = new CartShipping();
         }
+        $seller = Cart::where('cart_group_id', $request['cart_group_id'])->first();
+        $selCountry = $seller->product->country;
+
+        $customer = User::find($seller->customer_id);
+        $cusCountry = $customer->country;
+
+        if ($selCountry && $cusCountry == 'ID') {
+            $shipp = $request['id'];
+            $ship = explode(',', $shipp);
+            $service = $ship[0];
+            $cost = $ship[1];
+            $ship_method = 'NULL';
+        } else {
+            $service = 'NULL';
+            $cost = ShippingMethod::find($request['id'])->cost;
+            $ship_method = $request['id'];
+        }
+        // $customer =
+        // dd($customer);
+
+        // dd($cost);
+        // dd($request);
         $shipping['cart_group_id'] = $request['cart_group_id'];
-        $shipping['shipping_method_id'] = $request['id'];
-        $shipping['shipping_cost'] = ShippingMethod::find($request['id'])->cost;
+        $shipping['shipping_method_id'] = $ship_method;
+        $shipping['shipping_service'] = $service;
+        $shipping['shipping_cost'] = $cost;
         $shipping->save();
     }
 
@@ -69,7 +96,7 @@ class SystemController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        } else if ($request['shipping_method_id'] == 0) {
+        } elseif ($request['shipping_method_id'] == 0) {
             $validator = Validator::make($request->all(), [
                 'contact_person_name' => 'required',
                 'address_type' => 'required',

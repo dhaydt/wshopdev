@@ -1202,8 +1202,8 @@
                                 src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($seller->country)  }}.png"
                                 alt="Eng" style="width: 20px">
                         </div>
-                        @php($c_name = App\Country::where('country', $product->country)->get())
-                        <span style="font-size: 13px; color: #616166; line-height: 2;">{{ $c_name[0]->country_name
+                        @php($c_name = App\Country::where('country', $seller->country)->get())
+                        <span class="w-100" style="font-size: 13px; color: #616166; overflow-x: hidden; line-height: 2;">{{ $c_name[0]->country_name
                             }}</span>
                     </div>
                 </div>

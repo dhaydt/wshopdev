@@ -106,7 +106,7 @@
 
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label for="name">{{\App\CPU\translate('Brand')}}</label>
                                         <select
                                             class="js-example-basic-multiple js-states js-example-responsive form-control"
@@ -117,8 +117,11 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label for="weight">{{\App\CPU\translate('Product_weight')}}</label>
+                                        <input type="number" class="form-control" name="weight" required placeholder="in gram">
+                                    </div>
+                                    <div class="col-md-4">
                                         <label for="name">{{\App\CPU\translate('Unit')}}</label>
                                         <select
                                             class="js-example-basic-multiple form-control"
@@ -528,20 +531,9 @@
 
     <script>
         function check(){
-            Swal.fire({
-                title: '{{\App\CPU\translate('Are you sure')}}?',
-                text: '',
-                type: 'warning',
-                showCancelButton: true,
-                cancelButtonColor: 'default',
-                confirmButtonColor: '#377dff',
-                cancelButtonText: 'No',
-                confirmButtonText: 'Yes',
-                reverseButtons: true
-            }).then((result) => {
-                for ( instance in CKEDITOR.instances ) {
-                    CKEDITOR.instances[instance].updateElement();
-                }
+            // for ( instance in CKEDITOR.instances ) {
+            //         CKEDITOR.instances[instance].updateElement();
+            //     }
                 var formData = new FormData(document.getElementById('product_form'));
                 $.ajaxSetup({
                     headers: {
@@ -570,7 +562,19 @@
                         }
                     }
                 });
-            })
+            // Swal.fire({
+            //     title: '{{\App\CPU\translate('Are you sure')}}?',
+            //     text: '',
+            //     type: 'warning',
+            //     showCancelButton: true,
+            //     cancelButtonColor: 'default',
+            //     confirmButtonColor: '#377dff',
+            //     cancelButtonText: 'No',
+            //     confirmButtonText: 'Yes',
+            //     reverseButtons: true
+            // }).then((result) => {
+
+            // })
         };
     </script>
 

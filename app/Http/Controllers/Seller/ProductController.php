@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Seller;
 
+use App\Country;
 use App\CPU\Convert;
 use App\CPU\Helpers;
 use App\CPU\ImageManager;
@@ -13,7 +14,7 @@ use App\Model\DealOfTheDay;
 use App\Model\FlashDealProduct;
 use App\Model\Product;
 use App\Model\Review;
-use App\Model\Seller;
+use App\Model\Shop;
 use App\Model\Translation;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -27,6 +28,24 @@ class ProductController extends Controller
 {
     public function add_new()
     {
+        $seller = auth('seller')->user();
+        if ($seller->city == null) {
+            $shop = Shop::where(['seller_id' => $seller->id])->first();
+            // dd($shop->country);
+            if ($shop->country == 'ID') {
+                $country = Country::all();
+                // dd($country);
+
+                Toastr::warning('Fill your shop address first!');
+
+                return redirect('/seller/shop/edit/'.$shop->id);
+            }
+
+            Toastr::warning('Fill your shop address first!');
+
+            return redirect('/seller/shop/edit/'.$shop->id);
+        }
+        // dd($seller);
         $cat = Category::where(['parent_id' => 0])->get();
         $br = Brand::orderBY('name', 'ASC')->get();
 
@@ -106,14 +125,19 @@ class ProductController extends Controller
                 );
             });
         }
-
-        $id = auth('seller')->id();
-        $user = Seller::find($id);
+        $seller = auth('seller')->user();
+        $country = $seller->country;
+        $city = $seller->city;
+        $city_id = $seller->city_id;
+        // dd($request);
         // dd($user->country);
 
         $product = new Product();
-        $product->user_id = $id;
-        $product->country = $user->country;
+        $product->user_id = $seller->id;
+        $product->country = $country;
+        $product->city = $city;
+        $product->city_id = $city_id;
+        $product->weight = $request->weight;
         $product->added_by = 'seller';
         $product->name = $request->name[array_search('en', $request->lang)];
         $product->slug = Str::slug($request->name[array_search('en', $request->lang)], '-').'-'.Str::random(6);

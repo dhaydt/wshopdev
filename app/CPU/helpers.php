@@ -34,12 +34,14 @@ class Helpers
 
     public static function country()
     {
-        // $country = Product::with('country')->whereIn('country', 'country');
         $country = Country::with('product')->has('product')->get();
 
-        // all()->unique('country');
-        // ->pluck('country');
-        // dd($country);
+        return $country;
+    }
+
+    public static function getCountry()
+    {
+        $country = Country::all();
 
         return $country;
     }
@@ -224,8 +226,9 @@ class Helpers
         return $config;
     }
 
-    public static function get_shipping_methods($seller_id, $type)
+    public static function get_shipping_methods($seller_id, $type, $product_id)
     {
+        // dd($product_id);
         $id = auth('customer')->id();
         // dd($id);
         $user = User::find($id);
@@ -234,10 +237,11 @@ class Helpers
         $to_type = $user->city_type;
         // $to_district = $user->district
         // $to_state = $user->state_id;
-        // dd($to_type);
-        $weight = '50';
+        $product = Product::find($product_id);
+        // dd($product);
+        $weight = $product->weight ? $product->weight : '1';
 
-        $from_city = '151';
+        $from_city = $product->city_id ? $product->city_id : '151';
         $from_type = 'Kota';
         // $from_state = '21';
         $ShippingMethod = ShippingMethod::where(['status' => 1])->where(['creator_id' => $seller_id, 'creator_type' => $type])->get();
@@ -252,13 +256,13 @@ class Helpers
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            // CURLOPT_POSTFIELDS => 'origin='.$from_city.'&originType='.$from_type.'&destination='.$to_city.'&destinationType='.$to_type.'&weight='.$weight.'&courier=jne',
             CURLOPT_POSTFIELDS => 'origin='.$from_city.'&originType=city&destination='.$to_district.'&destinationType=subdistrict&weight='.$weight.'&courier=jne',
             CURLOPT_HTTPHEADER => [
                 'content-type: application/x-www-form-urlencoded',
                 'key:'.config('rajaongkir.api_key'),
             ],
         ]);
+        // dd('origin='.$from_city.'&originType=city&destination='.$to_district.'&destinationType=subdistrict&weight='.$weight.'&courier=tiki');
 
         $responseJne = curl_exec($curl);
         $errJne = curl_error($curl);
