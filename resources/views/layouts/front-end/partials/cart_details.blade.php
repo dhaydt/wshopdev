@@ -108,7 +108,7 @@
                         <option value="{{'JNE-'.$ship['service'].','.$ship['cost'][0]['value']}}"
                             {{$choosen_shipping['shipping_method_id']==$ship['service']?'selected':''}}>
                             {{"JNE - ".''.$ship['service'].' ( '.$ship['cost'][0]['etd'].' Days)
-                            '.\App\CPU\Helpers::currency_converter($ship['cost'][0]['value'])}}
+                            '.\App\CPU\Helpers::currency_converter(\App\CPU\Convert::idrTousd($ship['cost'][0]['value']))}}
                         </option>
                         @endforeach
                         @endif
@@ -119,7 +119,7 @@
                         <option value="{{$ship['service']}}"
                             {{$choosen_shipping['shipping_method_id']==$ship['service']?'selected':''}}>
                             {{"TIKI - ".''.$ship['service'].' ( '.$ship['cost'][0]['etd'].' Days)
-                            '.\App\CPU\Helpers::currency_converter($ship['cost'][0]['value'])}}
+                            '.\App\CPU\Helpers::currency_converter(\App\CPU\Convert::idrTousd($ship['cost'][0]['value']))}}
                         </option>
                         @endforeach
                         @endif
@@ -130,7 +130,7 @@
                         <option value="{{$ship['service']}}"
                             {{$choosen_shipping['shipping_method_id']==$ship['service']?'selected':''}}>
                             {{"SiCepat - ".''.$ship['service'].' ( '.$ship['cost'][0]['etd'].' Days)
-                            '.\App\CPU\Helpers::currency_converter($ship['cost'][0]['value'])}}
+                            '.\App\CPU\Helpers::currency_converter(\App\CPU\Convert::idrTousd($ship['cost'][0]['value']))}}
                         </option>
                         @endforeach
                         @endif
