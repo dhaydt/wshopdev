@@ -166,7 +166,7 @@
 
             .amount {
                 font-size: 13px;
-                margin- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 0px;
+                margin-right': 0px;
 
             }
 
@@ -249,8 +249,25 @@
                                                     {{$shipping->address}}
                                                     , {{$shipping->city}}
                                                     , {{$shipping->zip}}
-                                                    , {{$shipping->country}}
+                                                    @php($c_name = App\Country::where('country', $shipping->country)->first())
+                                                    , {{$c_name->country_name}}
                                                 @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="order_table_td">
+                                    <div class="order_table_info_div">
+                                        <div class="order_table_info_div_1 py-2">
+                                            <span
+                                                class="d-block spandHeadO">{{\App\CPU\translate('Seller')}}: </span>
+                                        </div>
+
+                                        <div class="order_table_info_div_2">
+                                            <span class="spanTr">
+                                                {{-- {{ dd($order) }} --}}
+                                                @php($shop=App\Model\Shop::where('seller_id', $order->seller_id)->first())
+                                                {{$shop->name}}
                                             </span>
                                         </div>
                                     </div>
@@ -278,7 +295,10 @@
                                                     {{isset($product['name']) ? $product['name'] : ''}}
                                                 </a><br>
                                                 <span>{{\App\CPU\translate('variant')}} : </span>
-                                                {{$detail->variant}}
+                                                {{$detail->variant}}<br>
+                                                <span>{{\App\CPU\translate('Seller')}} : </span>
+                                                @php($shop=App\Model\Shop::where('seller_id', $detail->seller_id)->first())
+                                                {{$shop->name}}
                                             </td>
                                         </div>
                                         <div class="col-md-6">

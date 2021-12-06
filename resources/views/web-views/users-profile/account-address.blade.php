@@ -391,13 +391,18 @@
                                         </div>
                                         <div><span class="font-nameA"> <strong>{{\App\CPU\translate('Phone')}}  :</strong>  {{$shippingAddress['phone']}}</span>
                                         </div>
+                                        <div><span class="font-nameA"> <strong>{{\App\CPU\translate('Province')}}  :</strong>  {{$shippingAddress['province']}}</span>
+                                        </div>
                                         <div><span class="font-nameA"> <strong>{{\App\CPU\translate('City')}}  :</strong>  {{$shippingAddress['city']}}</span>
+                                        </div>
+                                        <div><span class="font-nameA"> <strong>{{\App\CPU\translate('District')}}  :</strong>  {{$shippingAddress['district']}}</span>
                                         </div>
                                         <div><span class="font-nameA"> <strong> {{\App\CPU\translate('zip_code')}} :</strong> {{$shippingAddress['zip']}}</span>
                                         </div>
                                         <div><span class="font-nameA"> <strong>{{\App\CPU\translate('address')}} :</strong> {{$shippingAddress['address']}}</span>
                                         </div>
-                                        <div><span class="font-nameA"> <strong>{{\App\CPU\translate('Country')}} :</strong> {{$shippingAddress['country']}}</span>
+                                        @php($c_name = App\Country::where('country', $shippingAddress['country'])->first())
+                                        <div><span class="font-nameA"> <strong>{{\App\CPU\translate('Country')}} :</strong> {{$c_name->country_name}}</span>
                                         </div>
                                     </div>
                                 {{-- </div> --}}

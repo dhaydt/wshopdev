@@ -360,6 +360,7 @@
         })
 
         $('select[name="state"]').on('change', function(){
+            $('#loading').show();
             // kita buat variable provincedid untk menampung data id select province
             console.log($(this).val())
             let prov = $(this).val();
@@ -398,6 +399,7 @@
                         </option>`);
 
                         $('select[name="city"]').removeAttr('disabled');
+                        $('#loading').hide();
                         });
                     }
                 });
@@ -405,6 +407,7 @@
         });
 
         $('select[name="city"]').on('change', function(){
+            $('#loading').show();
             // kita buat variable provincedid untk menampung data id select province
             console.log($(this).val())
             let cities = $(this).val();
@@ -440,6 +443,7 @@
                         </option>`);
 
                         $('select[name="district"]').removeAttr('disabled');
+                        $('#loading').hide();
                         });
                     }
                 });

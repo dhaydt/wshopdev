@@ -1396,4 +1396,6 @@
                                         name',
   'Product_weight' => 'Product weight',
   'Please fill your address first' => 'Please fill your address first',
+  'Province' => 'Province',
+  'province' => 'Province',
 );

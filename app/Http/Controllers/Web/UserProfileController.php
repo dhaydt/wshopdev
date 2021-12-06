@@ -221,6 +221,7 @@ class UserProfileController extends Controller
             'zip' => $request->zip,
             'phone' => $request->phone,
             'state' => $state,
+            'province' => $state,
             'country' => $request->country,
             'created_at' => now(),
             'updated_at' => now(),
