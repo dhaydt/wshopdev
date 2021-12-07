@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_lang']], function () {
+    Route::post('/xendit/va/create', 'XenditController@createVa');
+    Route::get('/xendit/va/list', 'XenditController@getListVa');
+
     Route::group(['prefix' => 'auth', 'namespace' => 'auth'], function () {
         Route::post('register', 'PassportAuthController@register');
         Route::post('login', 'PassportAuthController@login');

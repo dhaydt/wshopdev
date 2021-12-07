@@ -22,6 +22,8 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode']], funct
     Route::get('searched-products', 'WebController@searched_products')->name('searched-products');
 
     Route::get('shortBy/{country}', 'ShortHomeController@shortBy')->name('shortBy');
+    Route::post('/xendit/va/create', 'XenditController@createVa');
+    Route::get('/xendit/va/list', 'XenditController@getListVa');
 
     Route::group(['middleware' => ['customer']], function () {
         Route::get('checkout-details', 'WebController@checkout_details')->name('checkout-details');

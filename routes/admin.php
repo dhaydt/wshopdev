@@ -326,6 +326,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'], fu
                 Route::post('{name}', 'PaymentMethodController@update')->name('update');
             });
 
+            Route::group(['prefix' => 'xendit-payment', 'as' => 'xendit-payment.'], function () {
+                Route::get('/', 'XenditPaymentController@index')->name('index');
+                // Route::post('{name}', 'XenditPaymentController@update')->name('update');
+                Route::post('/va/create', 'XenditPaymentController@createVa')->name('vaCreate');
+                Route::get('/va/list', 'XenditPaymentController@getListVa');
+            });
+
             Route::get('sms-module', 'SMSModuleController@sms_index')->name('sms-module');
             Route::post('sms-module-update/{sms_module}', 'SMSModuleController@sms_update')->name('sms-module-update');
         });
