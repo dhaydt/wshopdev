@@ -44,7 +44,11 @@
                                     {{-- {{ dd($province) }} --}}
                                     <label for="state">{{\App\CPU\translate('State_/_Province')}}</label>
                                     <select class="form-control" name="state">
+                                        @if ($shop->province)
+                                        <option value="{{ $shop->province }}">{{ $shop->province }}</option>
+                                        @else
                                         <option value="">Select your Province Address</option>
+                                        @endif
                                         @foreach($province as $p)
                                         <option value="{{$p['province_id'].','. $p['province']}}"
                                             provincename="{{$p['province']}}">
@@ -55,11 +59,29 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="address-city">{{\App\CPU\translate('City')}}</label>
+                                    <input type="hidden" value="{{ $shop->city_id }},{{ $shop->city }}" name="city">
                                     <select disabled class="form-control" name="city" id="address-city"
                                         placeholder="Select your city address"
                                         style="text-align: {{Session::get('direction') === " rtl" ? 'right' : 'left'
                                         }};">
+                                        @if ($shop->city)
+                                        @php($city = $shop->city_id.','.$shop->city )
+                                        <option value="{{ $city }}">{{ $shop->city }}</option>
+                                        @endif
                                         <option value="">Select your city address</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address-district">{{\App\CPU\translate('District')}}</label>
+                                    <input type="hidden" name="district" value="{{ $shop->district_id }},{{ $shop->district }}">
+                                    <select disabled class="form-control" name="district" id="address-district"
+                                        placeholder="Select your city address"
+                                        style="text-align: {{Session::get('direction') === " rtl" ? 'right' : 'left'
+                                        }};">
+                                        @if ($shop->district)
+                                        <option value="{{ $shop->district_id }},{{ $shop->district }}">{{ $shop->district }}</option>
+                                        @endif
+                                        <option value="">Select your District address</option>
                                     </select>
                                 </div>
                                 @else
@@ -144,7 +166,8 @@
 @push('script')
 
 <script>
-     $('select[name="state"]').on('change', function(){
+    $('select[name="state"]').on('change', function(){
+        $('#loading').show();
             // kita buat variable provincedid untk menampung data id select province
             console.log($(this).val())
             let prov = $(this).val();
@@ -183,6 +206,51 @@
                         </option>`);
 
                         $('select[name="city"]').removeAttr('disabled');
+                        $('#loading').hide();
+                        });
+                    }
+                });
+            }
+        });
+
+        $('select[name="city"]').on('change', function(){
+            $('#loading').show();
+            // kita buat variable provincedid untk menampung data id select province
+            console.log($(this).val())
+            let cities = $(this).val();
+            var array = cities.split(",");
+            let city = $.each(array,function(i){
+            // console.log(array[0]);
+            return array[0]
+            });
+            let cityId = city[0]
+            //kita cek jika id di dpatkan maka apa yg akan kita eksekusi
+            if(cityId){
+                // jika di temukan id nya kita buat eksekusi ajax GET
+                jQuery.ajax({
+                    // url yg di root yang kita buat tadi
+                    url:"/district/"+cityId,
+                    // aksion GET, karena kita mau mengambil data
+                    type:'GET',
+                    // type data json
+                    dataType:'json',
+                    // jika data berhasil di dapat maka kita mau apain nih
+                    success:function(data){
+                        console.log(cityId);
+                        // jika tidak ada select dr provinsi maka select kota kososng / empty
+                        $('select[name="district"]').empty();
+                        // // jika ada kita looping dengan each
+                        $.each(data, function(key, value){
+                            // console.log(key, value)
+                            district = value.subdistrict_name
+                            id = value.subdistrict_id
+                        // // perhtikan dimana kita akan menampilkan data select nya, di sini saya memberi name select kota adalah kota_id
+                        $('select[name="district"]').append(`<option value="${id},${district}">
+                            ${district}
+                        </option>`);
+
+                        $('select[name="district"]').removeAttr('disabled');
+                        $('#loading').hide();
                         });
                     }
                 });

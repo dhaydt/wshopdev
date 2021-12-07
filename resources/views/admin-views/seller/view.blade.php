@@ -296,6 +296,30 @@
                     </div>
                     <div class="flex-start">
                         <div>
+                            <h5>{{\App\CPU\translate('District')}} : </h5>
+                        </div>
+                        <div class="mx-1">
+                            <h5>{{$seller->shop->district}}</h5>
+                        </div>
+                    </div>
+                    <div class="flex-start">
+                        <div>
+                            <h5>{{\App\CPU\translate('City')}} : </h5>
+                        </div>
+                        <div class="mx-1">
+                            <h5>{{$seller->shop->city}}</h5>
+                        </div>
+                    </div>
+                    <div class="flex-start">
+                        <div>
+                            <h5>{{\App\CPU\translate('Province')}} : </h5>
+                        </div>
+                        <div class="mx-1">
+                            <h5>{{$seller->shop->province}}</h5>
+                        </div>
+                    </div>
+                    <div class="flex-start">
+                        <div>
                             <h5>{{\App\CPU\translate('country')}} : </h5>
                         </div>
                         <div class="ml-2">

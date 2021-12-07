@@ -41,16 +41,27 @@ class ShopController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request);
         if ($request->country == 'ID') {
             $provinces = $request->state;
             $province = explode(',', $provinces);
-            $prov = $province[1];
+            if (count($province) > 1) {
+                $prov = $province[1];
+            } else {
+                $prov = $province[0];
+            }
 
             $cities = $request->city;
             $cit = explode(',', $cities);
+
             $city_id = $cit[0];
             $city = $cit[1];
-            $city_type = $cit[2];
+            // $city_type = $cit[2];
+
+            $districts = $request->district;
+            $dis = explode(',', $districts);
+            $district_id = $dis[0];
+            $district = $dis[1];
         // dd($request);
         } else {
             $prov = $request->state;
@@ -64,11 +75,18 @@ class ShopController extends Controller
 
         $seller->province = $prov;
         $seller->city = $city;
+        $seller->district = $district;
         $seller->city_id = $city_id;
+        $seller->district_id = $district_id;
         $seller->save();
 
         $shop->name = $request->name;
         $shop->country = $request->country;
+        $shop->province = $prov;
+        $shop->city = $city;
+        $shop->district = $district;
+        $shop->city_id = $city_id;
+        $shop->district_id = $district_id;
         $shop->address = $request->address;
         $shop->contact = $request->contact;
         if ($request->image) {
