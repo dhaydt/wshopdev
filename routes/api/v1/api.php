@@ -53,6 +53,7 @@ Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_l
     });
 
     Route::get('country', 'AttributeController@country');
+    Route::get('short-country', 'AttributeController@short_country');
 
     Route::get('faq', 'GeneralController@faq');
 
@@ -77,6 +78,7 @@ Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_l
         Route::get('short_top-rated/{country}', 'ProductController@short_top_rated_products');
         Route::get('short_best-sellings/{country}', 'ProductController@short_best_sellings');
         Route::get('short_home-categories/{country}', 'ProductController@short_home_categories');
+        Route::get('short_flash-deal/{deal_id}/{country}', 'ProductController@short_flash_deal');
     });
 
     Route::group(['prefix' => 'notifications'], function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\v1;
 
+use App\Country;
 use App\CPU\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\Attribute;
@@ -14,6 +15,16 @@ class AttributeController extends Controller
         $attributes = Attribute::all();
 
         return response()->json($attributes, 200);
+    }
+
+    public function short_country()
+    {
+        $country = Country::with('product')->has('product')->get();
+        $count = $country->map(function ($country) {
+            return ['country' => $country->country, 'country_name' => $country->country_name];
+        });
+
+        return response()->json($count, 200);
     }
 
     public function country()

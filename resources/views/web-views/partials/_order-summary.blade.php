@@ -12,7 +12,7 @@
     .cart_total_value {
         font-weight: 700 !important;
         font-size: 25px !important;
-        color: {{$web_config['primary_color']}}     !important;
+        color: $web_config['primary_color']!important;
     }
 </style>
 
@@ -89,8 +89,10 @@
         </div>
 
         <div class="d-flex justify-content-center">
+            @php($total = $sub_total+$total_tax+$total_shipping_cost-$coupon_dis-$total_discount_on_product)
+             <input type="hidden" id="total" value="{{ $total }}">
             <span class="cart_total_value mt-2">
-                {{\App\CPU\Helpers::currency_converter($sub_total+$total_tax+$total_shipping_cost-$coupon_dis-$total_discount_on_product)}}
+                {{ \App\CPU\Helpers::currency_converter($total) }}
             </span>
         </div>
     </div>

@@ -245,7 +245,7 @@ class WebController extends Controller
         $order_ids = [];
         foreach (CartManager::get_cart_group_ids() as $group_id) {
             $data = [
-                'payment_method' => 'cash_on_delivery',
+                'payment_method' => 'cash_on_',
                 'order_status' => 'pending',
                 'payment_status' => 'unpaid',
                 'transaction_ref' => '',
@@ -256,7 +256,7 @@ class WebController extends Controller
             array_push($order_ids, $order_id);
         }
 
-        CartManager::cart_clean();
+        // CartManager::cart_clean();
 
         return view('web-views.checkout-complete');
     }

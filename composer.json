@@ -70,7 +70,8 @@
             "app/CPU/customer-manager.php",
             "app/CPU/back-end-helper.php",
             "app/CPU/convert.php",
-            "app/CPU/sms_module.php"
+            "app/CPU/sms_module.php",
+            "app/CPU/xendit.php"
         ],
         "psr-4": {
             "App\\": "app/"

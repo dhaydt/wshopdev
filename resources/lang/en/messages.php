@@ -1408,4 +1408,11 @@
   'Xendit_Virtual_Account' => 'Xendit Virtual Account',
   'Expiration_Date' => 'Expiration Date',
   'Bank' => 'Bank',
+  'Finish your payment' => 'Finish your payment',
+  'Complete_the_payment_to_process_the_transaction' => 'Complete the payment to process the transaction',
+  'Payment_Info' => 'Payment Info',
+  'New order ID for you' => 'New order ID for you',
+  'We have sent you this email to notify that you have a new order. You will be able to see your orders after login to your panel' => 'We have sent you this email to notify that you have a new order. You will be able to see your orders after login to your panel',
+  'Notification mail for new order received' => 'Notification mail for new order received',
+  'New order received' => 'New order received',
 );

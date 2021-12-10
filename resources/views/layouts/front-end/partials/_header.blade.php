@@ -1,5 +1,30 @@
 {{-- navabr / _header --}}
 <style>
+    #nav-global-location-slot {
+        border: 2px solid transparent;
+        padding: 10px;
+        transition: .3s;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    #nav-global-location-slot:hover {
+        border: 2px solid #0f0f0f;
+    }
+    .nav-line-1.nav-progressive-content {
+        font-size: 14px;
+        line-height: 14px;
+        transition: .3s;
+        height: 14px;
+        color: #9d9d9d;
+        font-weight: 700;
+    }
+
+    .nav-line-2.nav-progressive-content {
+        font-size: 16px;
+        font-weight: 700;
+        transition: .3s;
+    }
+
     .card-body.search-result-box {
         overflow: scroll;
         height: 400px;
@@ -273,6 +298,21 @@
                 </div> -->
 
                 <!-- new search -->
+                <div id="nav-global-location-slot" data-toggle="tooltip" data-placement="top" title="Location">
+                    <span id="nav-global-location-data-modal-action" class="a-declarative nav-progressive-attribute">
+                        <a id="nav-global-location-popover-link"
+                            class="d-flex align-items-center nav-a nav-a-2 a-popover-trigger a-declarative nav-progressive-attribute"
+                            tabindex="0">
+                            <img class="mt-1 mr-1" style="height: 20px; width: auto;" src="{{asset('public/assets/front-end/img/loc.png')}}" alt="">
+                            <div class="mr-2 d-flex flex-column justify-content-center">
+                                <span class="nav-line-1 nav-progressive-content">Deliver to</span>
+                                <span class="nav-line-2 nav-progressive-content" id="auto-loc">
+                                    {{-- Indonesia --}}
+                                </span>
+                            </div>
+                        </a>
+                    </span>
+                </div>
                 <div class="input-group-overlay d-none d-md-block mx-4"
                     style="text-align: {{Session::get('direction') === " rtl" ? 'right' : 'left' }}">
                     <form action="{{route('products')}}" type="submit" class="search_form">
@@ -700,22 +740,27 @@
                         <li class="nav-item dropdown ml-auto">
                             <a class="nav-link dropdown-toggle text-dark border-right py-2 mt-2" href="#"
                                 data-toggle="dropdown" style="color: black !important">
-                                <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}"
-                                    style="height: 16px; width: auto"
-                                    src="{{asset('public/assets/front-end')}}/img/loc.png" alt="Eng">
+                                @if (empty($country))
+                                <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}" width="20"
+                                    src="{{asset('public/assets/front-end')}}/img/store.png" alt="Eng">
+                                All Country
+                                @else
                                 <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}" width="20"
                                     src="{{asset('public/assets/front-end')}}/img/flags/{{ strtolower($country ?? 'id')  }}.png"
                                     alt="Eng">
-                                @if (empty($country))
-                                Indonesia
-                                @else
 
                                 {{ $country }}
                                 @endif
                             </a>
                             <ul class="dropdown-menu scroll-bar">
-                                @foreach($short as $data)
                                 <li>
+                                    <a class="dropdown-item pb-1" href="{{route('home')}}">
+                                        <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}"
+                                            width="20" src="{{asset('public/assets/front-end')}}/img/store.png"
+                                            alt="flsg" />
+                                        <span style="text-transform: capitalize">All Country</span>
+                                    </a>
+                                    @foreach($short as $data)
                                     <a class="dropdown-item pb-1" href="{{route('shortBy', $data->country)}}">
                                         <img class="{{Session::get('direction') === " rtl" ? 'ml-2' : 'mr-2' }}"
                                             width="20"
@@ -723,8 +768,8 @@
                                             alt="flsg" />
                                         <span style="text-transform: capitalize">{{ $data->country_name }}</span>
                                     </a>
+                                    @endforeach
                                 </li>
-                                @endforeach
                             </ul>
                         </li>
 
@@ -785,3 +830,18 @@
         </div>
     </div>
 </header>
+@push('script')
+<script>
+
+fetch('https://ipapi.co/json/')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(data) {
+    console.log('location',data);
+
+            $('#auto-loc').append(data.country_name)
+            $('#nav-global-location-slot').attr('data-original-title', data.city + ', ' + data.region);
+  });
+</script>
+@endpush

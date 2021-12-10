@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\CPU\CartManager;
+use App\CPU\Convert;
 use App\CPU\Helpers;
 use App\Http\Controllers\Controller;
 use App\Model\Cart;
@@ -48,6 +49,7 @@ class SystemController extends Controller
 
     public static function insert_into_cart_shipping($request)
     {
+        // dd($request);
         $shipping = CartShipping::where(['cart_group_id' => $request['cart_group_id']])->first();
         if (isset($shipping) == false) {
             $shipping = new CartShipping();
@@ -63,6 +65,9 @@ class SystemController extends Controller
             $ship = explode(',', $shipp);
             $service = $ship[0];
             $cost = $ship[1];
+
+            $price = Convert::idrTousd($cost);
+            // dd(round($price, 2));
             $ship_method = 'NULL';
         } else {
             $service = 'NULL';
@@ -77,7 +82,7 @@ class SystemController extends Controller
         $shipping['cart_group_id'] = $request['cart_group_id'];
         $shipping['shipping_method_id'] = $ship_method;
         $shipping['shipping_service'] = $service;
-        $shipping['shipping_cost'] = $cost;
+        $shipping['shipping_cost'] = round($price, 2);
         $shipping->save();
     }
 

@@ -9,6 +9,7 @@ use App\CPU\ProductManager;
 use function App\CPU\translate;
 use App\Http\Controllers\Controller;
 use App\Model\Category;
+use App\Model\FlashDealProduct;
 use App\Model\OrderDetail;
 use App\Model\Product;
 use App\Model\Review;
@@ -19,6 +20,18 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    public function short_flash_deal($deal_id, $country)
+    {
+        $p_ids = FlashDealProduct::with(['product'])->where(['country' => $country])
+        ->where(['flash_deal_id' => $deal_id])
+        ->pluck('product_id')->toArray();
+        if (count($p_ids) > 0) {
+            return response()->json(Helpers::product_data_formatting(Product::with(['rating'])->whereIn('id', $p_ids)->get(), true), 200);
+        }
+
+        // return response()->json($flash, 200);
+    }
+
     public function get_latest_products(Request $request)
     {
         $products = ProductManager::get_latest_products($request['limit'], $request['offset']);

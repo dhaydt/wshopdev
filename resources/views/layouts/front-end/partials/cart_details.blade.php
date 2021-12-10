@@ -116,7 +116,7 @@
                         @if ($shippings[0][1][0]['costs'])
                         @foreach($shippings[0][1][0]['costs'] as $ship)
                         {{-- {{ dd($ship) }} --}}
-                        <option value="{{$ship['service']}}"
+                        <option value="{{'TIKI- '.$ship['service'].','.$ship['cost'][0]['value']}}"
                             {{$choosen_shipping['shipping_method_id']==$ship['service']?'selected':''}}>
                             {{"TIKI - ".''.$ship['service'].' ( '.$ship['cost'][0]['etd'].' Days)
                             '.\App\CPU\Helpers::currency_converter(\App\CPU\Convert::idrTousd($ship['cost'][0]['value']))}}
@@ -124,10 +124,10 @@
                         @endforeach
                         @endif
 
+                        {{-- {{ dd($shippings[0][2]) }} --}}
                         @if ($shippings[0][2][0]['costs'])
                         @foreach($shippings[0][2][0]['costs'] as $ship)
-                        {{-- {{ dd($ship) }} --}}
-                        <option value="{{$ship['service']}}"
+                        <option value="{{'SiCepat- '.$ship['service'].','.$ship['cost'][0]['value']}}"
                             {{$choosen_shipping['shipping_method_id']==$ship['service']?'selected':''}}>
                             {{"SiCepat - ".''.$ship['service'].' ( '.$ship['cost'][0]['etd'].' Days)
                             '.\App\CPU\Helpers::currency_converter(\App\CPU\Convert::idrTousd($ship['cost'][0]['value']))}}
