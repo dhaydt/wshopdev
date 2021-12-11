@@ -59,7 +59,7 @@
                                 <form class="needs-validation" method="POST" id="payment-form"
                                     action="{{route('admin.business-settings.xendit-payment.vaInvoice')}}">
 
-                                    <input type="hidden" name="type" value="BNI">
+                                    <input type="hidden" name="type" value="OVO">
                                     {{-- <input class="price" type="hidden" name="price" value="price"> --}}
                                     {{ csrf_field() }}
                                     <button class="btn btn-block" type="submit">

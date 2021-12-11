@@ -56,14 +56,14 @@ class DealController extends Controller
             'updated_at' => now(),
         ]);
 
-        if($flash_deal_id) {
+        if ($flash_deal_id) {
             foreach ($request->lang as $index => $key) {
                 if ($request->title[$index] && $key != 'en') {
                     Translation::updateOrInsert(
                         ['translationable_type' => 'App\Model\FlashDeal',
                             'translationable_id' => $flash_deal_id,
                             'locale' => $key,
-                            'key' => 'title'],
+                            'key' => 'title', ],
                         ['value' => $request->title[$index]]
                     );
                 }
@@ -71,18 +71,21 @@ class DealController extends Controller
         }
 
         Toastr::success('Deal added successfully!');
+
         return back();
     }
 
     public function edit($deal_id)
     {
         $deal = FlashDeal::withoutGlobalScope('translate')->find($deal_id);
+
         return view('admin-views.deal.flash-update', compact('deal'));
     }
 
     public function feature_edit($deal_id)
     {
         $deal = FlashDeal::withoutGlobalScope('translate')->find($deal_id);
+
         return view('admin-views.deal.feature-update', compact('deal'));
     }
 
@@ -114,23 +117,24 @@ class DealController extends Controller
                     ['translationable_type' => 'App\Model\FlashDeal',
                         'translationable_id' => $deal_id,
                         'locale' => $key,
-                        'key' => 'title'],
+                        'key' => 'title', ],
                     ['value' => $request->title[$index]]
                 );
             }
         }
 
         Toastr::success('Deal updated successfully!');
+
         return back();
     }
 
     public function status_update(Request $request)
     {
-
         FlashDeal::where(['status' => 1])->where(['deal_type' => 'flash_deal'])->update(['status' => 0]);
         FlashDeal::where(['id' => $request['id']])->update([
             'status' => $request['status'],
         ]);
+
         return response()->json([
             'success' => 1,
         ], 200);
@@ -138,11 +142,11 @@ class DealController extends Controller
 
     public function feature_status(Request $request)
     {
-
         FlashDeal::where(['status' => 1])->where(['deal_type' => 'feature_deal'])->update(['status' => 0]);
         FlashDeal::where(['id' => $request['id']])->update([
             'status' => $request['status'],
         ]);
+
         return response()->json([
             'success' => 1,
         ], 200);
@@ -154,11 +158,11 @@ class DealController extends Controller
         FlashDeal::where(['id' => $request['id']])->update([
             'featured' => $request['featured'],
         ]);
+
         return response()->json([
             'success' => 1,
         ], 200);
     }
-
 
     // Feature Deal
     public function feature_index(Request $request)
@@ -178,6 +182,7 @@ class DealController extends Controller
             $flash_deals = FlashDeal::where('deal_type', 'feature_deal');
         }
         $flash_deals = $flash_deals->latest()->paginate(Helpers::pagination_limit())->appends($query_param);
+
         return view('admin-views.deal.feature-index', compact('flash_deals', 'search'));
     }
 
@@ -193,10 +198,12 @@ class DealController extends Controller
 
     public function add_product_submit(Request $request, $deal_id)
     {
+        $country = Product::find($request['product_id'])->first();
         DB::table('flash_deal_products')->insertOrIgnore([
             'product_id' => $request['product_id'],
             'flash_deal_id' => $deal_id,
             'discount' => $request['discount'],
+            'country' => $country['country'],
             'discount_type' => $request['discount_type'],
             'created_at' => now(),
             'updated_at' => now(),
@@ -208,6 +215,7 @@ class DealController extends Controller
     public function delete_product($deal_product_id)
     {
         FlashDealProduct::where(['product_id' => $deal_product_id])->delete();
+
         return back();
     }
 
@@ -227,6 +235,7 @@ class DealController extends Controller
             $deals = new DealOfTheDay();
         }
         $deals = $deals->latest()->paginate(Helpers::pagination_limit())->appends($query_param);
+
         return view('admin-views.deal.day-index', compact('deals', 'search'));
     }
 
@@ -243,14 +252,14 @@ class DealController extends Controller
             'updated_at' => now(),
         ]);
 
-        if($deal_id) {
+        if ($deal_id) {
             foreach ($request->lang as $index => $key) {
                 if ($request->title[$index] && $key != 'en') {
                     Translation::updateOrInsert(
                         ['translationable_type' => 'App\Model\DealOfTheDay',
                             'translationable_id' => $deal_id,
                             'locale' => $key,
-                            'key' => 'title'],
+                            'key' => 'title', ],
                         ['value' => $request->title[$index]]
                     );
                 }
@@ -258,6 +267,7 @@ class DealController extends Controller
         }
 
         Toastr::success('Deal added successfully!');
+
         return back();
     }
 
@@ -267,6 +277,7 @@ class DealController extends Controller
         DealOfTheDay::where(['id' => $request['id']])->update([
             'status' => $request['status'],
         ]);
+
         return response()->json([
             'success' => 1,
         ], 200);
@@ -275,6 +286,7 @@ class DealController extends Controller
     public function day_edit($deal_id)
     {
         $deal = DealOfTheDay::withoutGlobalScope('translate')->find($deal_id);
+
         return view('admin-views.deal.day-update', compact('deal'));
     }
 
@@ -296,13 +308,14 @@ class DealController extends Controller
                     ['translationable_type' => 'App\Model\DealOfTheDay',
                         'translationable_id' => $deal_id,
                         'locale' => $key,
-                        'key' => 'title'],
+                        'key' => 'title', ],
                     ['value' => $request->title[$index]]
                 );
             }
         }
 
         Toastr::success('Deal updated successfully!');
+
         return redirect()->route('admin.deal.day');
     }
 
@@ -310,6 +323,7 @@ class DealController extends Controller
     {
         DealOfTheDay::destroy($id);
         Toastr::success('Deal removed successfully!');
+
         return back();
     }
 }

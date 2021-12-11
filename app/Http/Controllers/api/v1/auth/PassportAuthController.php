@@ -41,7 +41,7 @@ class PassportAuthController extends Controller
             'password' => bcrypt($request->password),
             'temporary_token' => $temporary_token,
         ]);
-        dd($request->country);
+        // dd($request->country);
 
         $phone_verification = Helpers::get_business_settings('phone_verification');
         $email_verification = Helpers::get_business_settings('email_verification');

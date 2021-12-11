@@ -13,6 +13,7 @@ class CategoryController extends Controller
     {
         try {
             $categories = Category::with(['childes.childes'])->where(['position' => 0])->get();
+
             return response()->json($categories, 200);
         } catch (\Exception $e) {
             return response()->json([], 200);
@@ -22,5 +23,14 @@ class CategoryController extends Controller
     public function get_products($id)
     {
         return response()->json(Helpers::product_data_formatting(CategoryManager::products($id), true), 200);
+    }
+
+    public function short_get_products($id, $country)
+    {
+        $cat = CategoryManager::products($id)->where('country', $country);
+        $data = Helpers::product_data_formatting($cat, true);
+        // dd($cat);
+
+        return response()->json($data, 200);
     }
 }
