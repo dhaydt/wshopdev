@@ -22,8 +22,15 @@ Route::group(['namespace' => 'Web', 'middleware' => ['maintenance_mode']], funct
     Route::get('searched-products', 'WebController@searched_products')->name('searched-products');
 
     Route::get('shortBy/{country}', 'ShortHomeController@shortBy')->name('shortBy');
-    Route::post('/xendit/va/create', 'XenditController@createVa');
-    Route::get('/xendit/va/list', 'XenditController@getListVa');
+
+    Route::group(['prefix' => 'xendit-payment', 'as' => 'xendit-payment.'], function () {
+        Route::get('/', 'XenditPaymentController@index')->name('index');
+        // Route::post('{name}', 'XenditPaymentController@update')->name('update');
+        Route::post('/va/create', 'XenditPaymentController@createVa')->name('vaCreate');
+        Route::get('/va/list', 'XenditPaymentController@getListVa');
+        Route::post('/va/invoice', 'XenditPaymentController@invoice')->name('vaInvoice');
+        Route::get('/success/{type}', 'XenditPaymentController@success')->name('xenditSuccess');
+    });
 
     Route::group(['middleware' => ['customer']], function () {
         Route::get('checkout-details', 'WebController@checkout_details')->name('checkout-details');

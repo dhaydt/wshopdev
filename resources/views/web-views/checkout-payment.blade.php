@@ -57,7 +57,7 @@
                         <div class="card">
                             <div class="card-body" style="height: 100px">
                                 <form class="needs-validation" method="POST" id="payment-form"
-                                    action="{{route('admin.business-settings.xendit-payment.vaInvoice')}}">
+                                    action="{{route('xendit-payment.vaInvoice')}}">
 
                                     <input type="hidden" name="type" value="OVO">
                                     {{-- <input class="price" type="hidden" name="price" value="price"> --}}
@@ -75,7 +75,7 @@
                         <div class="card">
                             <div class="card-body" style="height: 100px">
                                 <form class="needs-validation" method="POST" id="payment-form"
-                                    action="{{route('admin.business-settings.xendit-payment.vaInvoice')}}">
+                                    action="{{route('xendit-payment.vaInvoice')}}">
 
                                     <input type="hidden" name="type" value="DANA">
                                     {{-- <input class="price" type="hidden" name="price" value="price"> --}}
